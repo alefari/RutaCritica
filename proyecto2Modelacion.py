@@ -1,4 +1,8 @@
 import tabulate
+import numpy as np
+import networkx as nx
+import matplotlib.pyplot as plt
+
 
 rutaCritica = ''
 
@@ -168,6 +172,16 @@ def recursivo(nodoInic):
             rutaCritica = rutaCritica + ' - ' + str(actividades[findIndex(numSucesor)]['numero'])
             recursivo(findIndex(numSucesor))
 
+def construirMatrizDeAdyacencia():
+    global matriz;
+    matriz = [ [ 0 for i in actividades ] for j in actividades ]
+    for x in actividades:
+        origen = x['numero']
+        destino = x['sucesoras']
+        if(isinstance(destino, list)):
+            for x in destino:
+                matriz[origen-1][x-1] = 1
+
 colocarSucesoras()
 vueltaAdelante()
 vueltaAtras()
@@ -177,3 +191,11 @@ header = actividades[0].keys()
 rows =  [x.values() for x in actividades]
 print (tabulate.tabulate(rows, header, tablefmt='grid'))
 print('La ruta critica es: '+rutaCritica)
+
+
+construirMatrizDeAdyacencia()
+
+A = np.matrix(matriz)
+G = nx.from_numpy_matrix(A)
+nx.draw(G, with_labels=True, font_weight='bold')
+plt.show()
