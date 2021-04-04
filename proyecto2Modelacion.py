@@ -1,3 +1,9 @@
+import tabulate
+import numpy as np
+import networkx as nx
+import matplotlib.pyplot as plt
+
+
 rutaCritica = ''
 
 actividadesAux = []
@@ -263,14 +269,30 @@ while(ingresarNodos):
     if(boolActividad == 'N' or boolActividad == 'NO'):
         ingresarNodos = False
 
-#prueba
-print(actividades)
+def construirMatrizDeAdyacencia():
+    global matriz
+    matriz = [ [ 0 for i in actividades ] for j in actividades ]
+    for x in actividades:
+        origen = x['numero']
+        destino = x['sucesoras']
+        if(isinstance(destino, list)):
+            for x in destino:
+                matriz[origen-1][x-1] = 1
 
 colocarSucesoras()
 vueltaAdelante()
 vueltaAtras()
 calcularHolguras()
 calcularRutaCritica()
+header = actividades[0].keys()
+rows =  [x.values() for x in actividades]
+print (tabulate.tabulate(rows, header, tablefmt='grid'))
+print('La ruta critica es: '+rutaCritica)
 
-print(actividades)
-print(rutaCritica)
+
+construirMatrizDeAdyacencia()
+
+A = np.matrix(matriz)
+G = nx.from_numpy_matrix(A)
+nx.draw(G, with_labels=True, font_weight='bold')
+plt.show()
