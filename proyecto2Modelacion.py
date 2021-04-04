@@ -1,5 +1,7 @@
 rutaCritica = ''
 
+actividadesAux = []
+
 actividades = [
     {
         'numero': 1,
@@ -87,6 +89,10 @@ actividades = [
     },
 ]
 
+def findIndexName(nombre):
+    for index, actividad in enumerate(actividades):
+        if actividad['nombre'] == nombre:
+            return index
 def findIndex(numero):
     for index, actividad in enumerate(actividades):
         if actividad['numero'] == numero:
@@ -156,15 +162,109 @@ def calcularHolguras():
 def calcularRutaCritica():
     global rutaCritica
     actual = identificarInicio()
-    rutaCritica += str(actividades[actual]['numero'])
+    rutaCritica += str(actividades[actual]['nombre'])
     recursivo(actual)
 
 def recursivo(nodoInic):
     global rutaCritica
     for numSucesor in actividades[nodoInic]['sucesoras']:
         if actividades[findIndex(numSucesor)]['holgura'] == 0:
-            rutaCritica = rutaCritica + ' - ' + str(actividades[findIndex(numSucesor)]['numero'])
+            rutaCritica = rutaCritica + ' - ' + str(actividades[findIndex(numSucesor)]['nombre'])
             recursivo(findIndex(numSucesor))
+
+# ---------- INICIA EL PROGRAMA --------
+# ---------- Ingresar nodos
+ingresarNodos = True
+indiceActividad = 1
+actividades = []
+print('------ Ingrese la primera actividad ------')
+
+print('Ingrese el nombre')
+inputName = input()
+
+print('Ingrese la duración')
+inputDuracion = int(input())
+
+actividades.append({
+    'numero': indiceActividad,
+    'nombre': inputName,
+    'duracion': inputDuracion,
+    'predecesoras': [],
+    'sucesoras': [],
+    'inicioTemprano': None,
+    'culminacionTemprana': None,
+    'inicioTardio': None,
+    'culminacionTardia': None,
+    'holgura': None
+})
+indiceActividad += 1
+
+print('Ingrese otra actividad')
+while(ingresarNodos):
+    predList = []
+    
+    print('Ingrese el nombre')
+    inputName = input()
+
+    print('Ingrese la duración')
+    inputDuracion = int(input())
+
+    # PREGUNTAMOS SI AÑADIR PREDECESORES
+    # print('¿Esta actividad tiene predecesores? S/N')
+    # boolPredecesor = input().upper()
+
+    # VALIDACION
+    # while(boolPredecesor != 'S' and boolPredecesor != 'SI' and boolPredecesor != 'N' and boolPredecesor != 'NO'):
+    #     print('Opcion invalida, ingrese S/N')
+    #     boolPredecesor = input().upper()
+
+    havePredecesor = True
+    # if(boolPredecesor == 'S' or boolPredecesor == 'SI'):
+    #     havePredecesor = True
+
+    # CICLO DE AÑADIR PREDECESORES
+    while(havePredecesor):
+        print('Ingrese el nombre del predecesor')
+        inputPredName = input()
+        indexPred = findIndexName(inputPredName)
+        predList.append(actividades[indexPred]['numero'])
+
+        # PREGUNTAMOS SI AÑADIR MÁS PREDECESORES
+        print('¿Desea añadir otro predecesor? S/N')
+        boolPredecesor = input().upper()
+
+        # VALIDACION
+        while(boolPredecesor != 'S' and boolPredecesor != 'SI' and boolPredecesor != 'N' and boolPredecesor != 'NO'):
+            print('Opcion invalida, ingrese S/N')
+            boolPredecesor = input().upper()
+        if(boolPredecesor == 'N' or boolPredecesor == 'NO'):
+            havePredecesor = False
+
+    # AÑADIOMOS LA ACTIVIDAD
+    actividades.append({
+        'numero': indiceActividad,
+        'nombre': inputName,
+        'duracion': inputDuracion,
+        'predecesoras': predList,
+        'sucesoras': [],
+        'inicioTemprano': None,
+        'culminacionTemprana': None,
+        'inicioTardio': None,
+        'culminacionTardia': None,
+        'holgura': None
+    })
+    indiceActividad += 1
+
+    print('¿Desea ingresar otra actividad? S/N')
+    boolActividad = input().upper()
+    while(boolActividad != 'S' and boolActividad != 'SI' and boolActividad != 'N' and boolActividad != 'NO'):
+        print('Opcion invalida, ingrese S/N')
+        boolActividad = input().upper()
+    if(boolActividad == 'N' or boolActividad == 'NO'):
+        ingresarNodos = False
+
+#prueba
+print(actividades)
 
 colocarSucesoras()
 vueltaAdelante()
