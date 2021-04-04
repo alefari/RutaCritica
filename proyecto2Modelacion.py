@@ -1,3 +1,5 @@
+import tabulate
+
 rutaCritica = ''
 
 actividades = [
@@ -171,6 +173,7 @@ vueltaAdelante()
 vueltaAtras()
 calcularHolguras()
 calcularRutaCritica()
-
-print(actividades)
-print(rutaCritica)
+header = actividades[0].keys()
+rows =  [x.values() for x in actividades]
+print (tabulate.tabulate(rows, header, tablefmt='grid'))
+print('La ruta critica es: '+rutaCritica)
