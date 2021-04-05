@@ -183,31 +183,38 @@ def recursivo(nodoInic):
 ingresarNodos = True
 indiceActividad = 1
 actividades = []
-print('------ Ingrese la primera actividad ------')
+# print('------ Ingrese la primera actividad ------')
 
-print('Ingrese el nombre')
-inputName = input()
+# print('Ingrese el número de la actividad')
+# inputNumero = int(input())
 
-print('Ingrese la duración')
-inputDuracion = int(input())
+# print('Ingrese el nombre')
+# inputName = input()
 
-actividades.append({
-    'numero': indiceActividad,
-    'nombre': inputName,
-    'duracion': inputDuracion,
-    'predecesoras': [],
-    'sucesoras': [],
-    'inicioTemprano': None,
-    'culminacionTemprana': None,
-    'inicioTardio': None,
-    'culminacionTardia': None,
-    'holgura': None
-})
-indiceActividad += 1
+# print('Ingrese la duración')
+# inputDuracion = int(input())
 
-print('Ingrese otra actividad')
+# actividades.append({
+#     'numero': indiceActividad,
+#     'nombre': inputName,
+#     'duracion': inputDuracion,
+#     'predecesoras': [],
+#     'sucesoras': [],
+#     'inicioTemprano': None,
+#     'culminacionTemprana': None,
+#     'inicioTardio': None,
+#     'culminacionTardia': None,
+#     'holgura': None
+# })
+# indiceActividad += 1
+
+
 while(ingresarNodos):
+    print('Ingrese una nueva actividad')
     predList = []
+
+    print('Ingrese el número de la actividad')
+    inputNumero = int(input())
     
     print('Ingrese el nombre')
     inputName = input()
@@ -215,25 +222,26 @@ while(ingresarNodos):
     print('Ingrese la duración')
     inputDuracion = int(input())
 
-    # PREGUNTAMOS SI AÑADIR PREDECESORES
-    # print('¿Esta actividad tiene predecesores? S/N')
-    # boolPredecesor = input().upper()
+    #PREGUNTAMOS SI AÑADIR PREDECESORES
+    print('¿Esta actividad tiene predecesores? S/N')
+    boolPredecesor = input().upper()
 
     # VALIDACION
-    # while(boolPredecesor != 'S' and boolPredecesor != 'SI' and boolPredecesor != 'N' and boolPredecesor != 'NO'):
-    #     print('Opcion invalida, ingrese S/N')
-    #     boolPredecesor = input().upper()
+    while(boolPredecesor != 'S' and boolPredecesor != 'SI' and boolPredecesor != 'N' and boolPredecesor != 'NO'):
+        print('Opcion invalida, ingrese S/N')
+        boolPredecesor = input().upper()
 
-    havePredecesor = True
-    # if(boolPredecesor == 'S' or boolPredecesor == 'SI'):
-    #     havePredecesor = True
+    havePredecesor = False
+    if(boolPredecesor == 'S' or boolPredecesor == 'SI'):
+        havePredecesor = True
 
     # CICLO DE AÑADIR PREDECESORES
     while(havePredecesor):
-        print('Ingrese el nombre del predecesor')
-        inputPredName = input()
-        indexPred = findIndexName(inputPredName)
-        predList.append(actividades[indexPred]['numero'])
+        print('Ingrese el numero del predecesor')
+        inputPredName = int(input())
+        # indexPred = findIndexName(inputPredName)
+        # predList.append(actividades[indexPred]['numero'])
+        predList.append(inputPredName)
 
         # PREGUNTAMOS SI AÑADIR MÁS PREDECESORES
         print('¿Desea añadir otro predecesor? S/N')
@@ -248,7 +256,7 @@ while(ingresarNodos):
 
     # AÑADIOMOS LA ACTIVIDAD
     actividades.append({
-        'numero': indiceActividad,
+        'numero': inputNumero,
         'nombre': inputName,
         'duracion': inputDuracion,
         'predecesoras': predList,
@@ -259,7 +267,7 @@ while(ingresarNodos):
         'culminacionTardia': None,
         'holgura': None
     })
-    indiceActividad += 1
+    # indiceActividad += 1
 
     print('¿Desea ingresar otra actividad? S/N')
     boolActividad = input().upper()
@@ -284,6 +292,7 @@ vueltaAdelante()
 vueltaAtras()
 calcularHolguras()
 calcularRutaCritica()
+
 header = actividades[0].keys()
 rows =  [x.values() for x in actividades]
 print (tabulate.tabulate(rows, header, tablefmt='grid'))
