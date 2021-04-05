@@ -213,14 +213,44 @@ while(ingresarNodos):
     print('Ingrese una nueva actividad')
     predList = []
 
-    print('Ingrese el número de la actividad')
-    inputNumero = int(input())
-    
+    print('\nIngrese el número de la actividad')
+    checkNum = True
+    while(checkNum): 
+        checkNum = False
+        try:
+            inputNumero = int(input())       
+        except ValueError:
+            print("*Opcion invalida, ingrese un número*")
+            checkNum = True
+        else:
+            for x in range(0,len(actividades)):
+                if(actividades[x]['numero'] == inputNumero):
+                    print("*Este número ya está en uso, ingrese otro*")
+                    checkNum = True
+ 
+
     print('Ingrese el nombre')
-    inputName = input()
+    
+    checkName = True
+    while checkName:
+        inputName = input()
+        checkName = False
+        for x in range(0,len(actividades)):
+                if(actividades[x]['nombre'] == inputName):
+                    print("*Ya existe una actividad con este nombre, ingrese uno diferente*")
+                    checkName = True
+
 
     print('Ingrese la duración')
-    inputDuracion = int(input())
+    # VALIDACION
+    while True: 
+        try:
+            inputDuracion = int(input())       
+        except ValueError:
+            print("Opcion invalida, ingrese un número")
+            continue
+        else:
+            break 
 
     #PREGUNTAMOS SI AÑADIR PREDECESORES
     print('¿Esta actividad tiene predecesores? S/N')
@@ -238,7 +268,16 @@ while(ingresarNodos):
     # CICLO DE AÑADIR PREDECESORES
     while(havePredecesor):
         print('Ingrese el numero del predecesor')
-        inputPredName = int(input())
+        # inputPredName = int(input())
+        # VALIDACION
+        while True: 
+            try:
+                inputPredName = int(input())       
+            except ValueError:
+                print("Opcion invalida, ingrese un número")
+                continue
+            else:
+                break 
         # indexPred = findIndexName(inputPredName)
         # predList.append(actividades[indexPred]['numero'])
         predList.append(inputPredName)
