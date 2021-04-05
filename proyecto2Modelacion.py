@@ -318,13 +318,18 @@ while(ingresarNodos):
 
 def construirMatrizDeAdyacencia():
     global matriz
+    arregloDeActividades = []
+    for x in actividades:
+        arregloDeActividades.append(x['numero'])
     matriz = [ [ 0 for i in actividades ] for j in actividades ]
     for x in actividades:
         origen = x['numero']
+        start = arregloDeActividades.index(origen)
         destino = x['sucesoras']
         if(isinstance(destino, list)):
             for x in destino:
-                matriz[origen-1][x-1] = 1
+                end = arregloDeActividades.index(x)
+                matriz[start][end] = 1
 
 colocarSucesoras()
 vueltaAdelante()
